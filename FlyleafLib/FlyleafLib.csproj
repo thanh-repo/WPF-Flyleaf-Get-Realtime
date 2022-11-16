@@ -1,0 +1,99 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0-windows</TargetFrameworks>
+	<UseWindowsForms>true</UseWindowsForms>
+	<UseWPF>true</UseWPF>
+	<PackageIcon>Flyleaf.png</PackageIcon>
+	<PackageIconUrl />
+	<RepositoryUrl></RepositoryUrl>
+	<Description>Media Player .NET Library for WPF/WinForms (based on FFmpeg/DirectX)</Description>
+	<Version>3.6.1</Version>
+	<Authors>SuRGeoNix</Authors>
+	<Copyright>SuRGeoNix © 2022</Copyright>
+	<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+	<PackageProjectUrl>https://github.com/SuRGeoNix/Flyleaf</PackageProjectUrl>
+	<PackageTags>flyleaf flyleaflib video audio media player engine framework download extract ffmpeg vortice directx</PackageTags>
+	<IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReleaseNotes>
+		Player: Improves buffering cancellation while seeking but still gives few ms to show one frame
+		Renderer: Becomes completely independent from WPF/WinForms and requires only a Window Handle (IntPtr)
+		Renderer: GPUAdapters clean-up and improvements (adds Engine.Video.Screens)
+		Renderer: Restores WARP device fallback
+		VideoDecoder: Fixes a rare issue with keyframes
+		FlyleafHost.Wpf: Adds some support for multi-monitors
+		FlyleafHost.Wpf: Fixes a bug during restore from maximized
+	</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>FlyleafLib.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
+    <WarningLevel>6</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
+    <WarningLevel>6</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="MediaFramework\MediaRenderer\Shaders\FlyleafPS.hlsl" />
+    <None Remove="MediaFramework\MediaRenderer\Shaders\PSSimple.hlsl" />
+    <None Remove="MediaFramework\MediaRenderer\Shaders\VSSimple.hlsl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="MediaFramework\MediaRenderer\Shaders\FlyleafPS.hlsl" />
+    <EmbeddedResource Include="MediaFramework\MediaRenderer\Shaders\PSSimple.hlsl" />
+    <EmbeddedResource Include="MediaFramework\MediaRenderer\Shaders\VSSimple.hlsl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FFmpeg.AutoGen" Version="4.4.1.1" />
+    <PackageReference Include="Vortice.D3DCompiler" Version="2.1.32" />
+    <PackageReference Include="Vortice.Direct3D11" Version="2.1.32" />
+    <PackageReference Include="Vortice.Mathematics" Version="1.4.18" />
+    <PackageReference Include="Vortice.MediaFoundation" Version="2.1.32" />
+    <PackageReference Include="Vortice.XAudio2" Version="2.1.32" />
+  </ItemGroup>
+  
+  <ItemGroup>
+	<Import Include="System" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Net.Http" />
+    <Import Include="System.Numerics" />
+    <Import Include="System.Windows" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Xaml" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="Microsoft.CSharp" />
+    <Import Include="System.Xml" />
+    <Import Include="WindowsBase" />
+    <Import Include="WindowsFormsIntegration" />
+  </ItemGroup>
+	
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+		<Reference Include="System.Net.Http" />
+	</ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="..\Images\Flyleaf.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
