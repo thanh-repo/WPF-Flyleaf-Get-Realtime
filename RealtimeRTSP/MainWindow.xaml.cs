@@ -16,24 +16,26 @@ namespace RealtimeRTSP
         private string _TimeRtsp;
         public string TimeRtsp { get { return _TimeRtsp; } set { _TimeRtsp = value; OnPropertyChanged(); } }
         public Player Player { get; set; }
+        public Player Player1 { get; set; }
         public MainWindow()
         {
             InitializeComponent();
             Engine.Start(DefaultEngineConfig());
             Player = new Player(PlayerDefaultConfig());
-            Player.OpenAsync("rtsp://rtsp.stream/pattern");
+            Player.OpenAsync("rtsp://admin:Password1!@192.168.219.111:554/0/onvif/profile2/media.smp");
+            Player1 = new Player(PlayerDefaultConfig());
+            Player1.OpenAsync("rtsp://rtsp.stream/pattern");
             Player.OpenCompleted += Player_OpenCompleted;
             DataContext = this;
         }
-
+        static DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private void Player_OpenCompleted(object? sender, OpenCompletedArgs e)
         {
             Task.Run(() =>
             {
                 while (true)
                 {
-                    long CurrentTimeTick = Player.MainDemuxer.StartTimestamp + (long)(Player.CurTime / 1);
-                    DateTime TimeNow = ToDateTimeForEpochMSec(CurrentTimeTick);
+                    DateTime TimeNow = epoch.AddTicks((Player.MainDemuxer.StartTimestamp * 10) + Player.MainDemuxer.CurTime).AddHours(9);
                     TimeRtsp = TimeNow.ToString("yyyy-MM-dd, HH:mm:ss.ffffff");
                 }
             });
